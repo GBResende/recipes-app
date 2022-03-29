@@ -1,13 +1,17 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-function CardProducts() {
+function CardProducts(props) {
+  const { location: { pathname } } = props;
+  console.log(pathname);
   return (
-    <div>CardProducts</div>
+    <div>{pathname}</div>
   );
 }
 
-CardProducts.propTypes = {};
+CardProducts.propTypes = {
+  location: PropTypes.shape().isRequired,
+};
 
 export default CardProducts;
 
