@@ -1,58 +1,56 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-// import App from '../App';
-import CardProducts from '../components/CardProducts';
+import Login from '../pages/Login';
+import Foods from '../pages/Foods';
+import Drinks from '../pages/Drinks';
+import DetailRecipes from '../pages/DetailRecipes';
+import InProgressRecipes from '../pages/InProgressRecipes';
+import Explorer from '../pages/Explorer';
+import ExploreFoods from '../pages/ExploreFoods';
+import ExploreDrinks from '../pages/ExploreDrinks';
+import FoodsIngredients from '../pages/FoodsIngredients';
+import DrinksIngredients from '../pages/DrinksIngredients';
+import FoodsNationality from '../pages/FoodsNationality';
+import Profile from '../pages/Profile';
+import DoneRecipes from '../pages/DoneRecipes';
+import FavoritesRecipes from '../pages/FavoritesRecipes';
 
-const Routes = () => (
-  <Switch>
-    <Route exact path="/" component={ CardProducts } />
-    <Route path="/foods" component={ () => <h1>Foods</h1> } />
-    <Route path="/drinks" component={ () => <h1>Drinks</h1> } />
-    <Route
-      path="/foods/:id"
-      render={
-        (props) => <h1 { ...props }>Tela de detalhes de uma receita de comida</h1>
+const Routes = () => {
+  const pathAndComponent = [
+    { path: '/', component: (props) => <Login { ...props } /> },
+    { path: '/foods', component: (props) => <Foods { ...props } /> },
+    { path: '/drinks', component: (props) => <Drinks { ...props } /> },
+    { path: '/foods/:id', component: (props) => <DetailRecipes { ...props } /> },
+    { path: '/drinks/:id', component: (props) => <DetailRecipes { ...props } /> },
+    { path: '/foods/:id/in-progress',
+      component: (props) => <InProgressRecipes { ...props } /> },
+    { path: '/drinks/:id/in-progress',
+      component: (props) => <InProgressRecipes { ...props } /> },
+    { path: '/explore', component: (props) => <Explorer { ...props } /> },
+    { path: '/explore/foods', component: (props) => <ExploreFoods { ...props } /> },
+    { path: '/explore/drinks', component: (props) => <ExploreDrinks { ...props } /> },
+    { path: '/explore/foods/ingredients',
+      component: (props) => <FoodsIngredients { ...props } /> },
+    { path: '/explore/drinks/ingredients',
+      component: (props) => <DrinksIngredients { ...props } /> },
+    { path: '/explore/foods/nationalities',
+      component: (props) => <FoodsNationality { ...props } /> },
+    { path: '/profile', component: (props) => <Profile { ...props } /> },
+    { path: '/done-recipes', component: (props) => <DoneRecipes { ...props } /> },
+    { path: '/favorite-recipes',
+      component: (props) => <FavoritesRecipes { ...props } /> },
+    { path: '/*', component: <h1>Page Not Found</h1> },
+  ];
+
+  return (
+    <Switch>
+      {
+        pathAndComponent.map(({ path, component }) => (
+          <Route key={ path } exact path={ path } render={ component } />
+        ))
       }
-    />
-    <Route
-      path="/drinks/:id"
-      render={
-        (props) => <h1 { ...props }>Tela de detalhes de uma receita de bebida</h1>
-      }
-    />
-    <Route
-      path="/foods/:id/in-progress"
-      render={ (props) => <h1 { ...props }>Tela de receita em progresso de comida</h1> }
-    />
-    <Route
-      path="/drinks/:id/in-progress"
-      render={ (props) => <h1 { ...props }>Tela de receita em progresso de bebida</h1> }
-    />
-    <Route path="/explore" component={ () => <h1>Tela de explorar</h1> } />
-    <Route path="/explore/foods" component={ () => <h1>Tela de explorar comidas</h1> } />
-    <Route path="/explore/drinks" component={ () => <h1>Tela de explorar bebidas</h1> } />
-    <Route
-      path="/explore/foods/ingredients"
-      component={
-        () => <h1>Tela de explorar comidas por ingrediente</h1>
-      }
-    />
-    <Route
-      path="/explore/drinks/ingredients"
-      component={ () => <h1>Tela de explorar comidas por ingrediente</h1> }
-    />
-    <Route
-      path="/explore/foods/nationalities"
-      component={ () => <h1>Tela de explorar bebidas por nacionalidade</h1> }
-    />
-    <Route path="/profile" component={ () => <h1>Tela de perfil</h1> } />
-    <Route path="/done-recipes" component={ () => <h1>Tela de receitas feitas</h1> } />
-    <Route
-      path="/favorite-recipes"
-      component={ () => <h1>Tela de receitas favoritas</h1> }
-    />
-    <Route path="*" component={ () => <h1>Page Not Found</h1> } />
-  </Switch>
-);
+    </Switch>
+  );
+};
 
 export default Routes;
