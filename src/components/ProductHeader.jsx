@@ -17,33 +17,16 @@ function ProductHeader() {
     <div>
       <img src="" alt="foto da comida ou bebida" />
       <h3>Nome da comida</h3>
-      {
-        !favorite
-          ? (
-            <button
-              type="button"
-              onClick={ handleClickFavorite }
-              style={ {
-                backgroundColor: rgba,
-                border: '0',
-              } }
-            >
-              <img src={ whiteHeartIcon } alt="not favorite" />
-            </button>
-          )
-          : (
-            <button
-              type="button"
-              onClick={ handleClickFavorite }
-              style={ {
-                backgroundColor: rgba,
-                border: '0',
-              } }
-            >
-              <img src={ blackHeartIcon } alt="favorite" />
-            </button>
-          )
-      }
+      <button
+        type="button"
+        onClick={ handleClickFavorite }
+        style={ {
+          backgroundColor: rgba,
+          border: '0',
+        } }
+      >
+        <img src={ !favorite ? whiteHeartIcon : blackHeartIcon } alt="not favorite" />
+      </button>
       <button
         type="button"
         onClick={ () => copy('colocar aqui o link da página atual') }
