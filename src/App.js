@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 import rockGlass from './images/rockGlass.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ProductHeader from './components/ProductHeader';
-
+import DetailRecipes from './pages/DetailRecipes';
 
 function App() {
   return (
@@ -16,7 +15,7 @@ function App() {
       >
         Glass
       </object>
-      <ProductHeader />
+      <DetailRecipes />
     </div>
   );
 }

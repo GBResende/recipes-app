@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-=======
 
 const ExploreDrinks = () => {
   const history = useHistory();

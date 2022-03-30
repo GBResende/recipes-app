@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import copy from 'clipboard-copy';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
-function ProductHeader() {
+function ProductHeader(props) {
   const [favorite, setFavorite] = useState(false);
 
   const handleClickFavorite = () => {
@@ -13,11 +14,19 @@ function ProductHeader() {
 
   const rgba = 'rgba(0, 0, 0, 0%)';
 
+  const { image, name, category } = props;
+  console.log(image);
   return (
     <div>
-      <img src="" alt="foto da comida ou bebida" />
-      <h3>Nome da comida</h3>
+      <img
+        data-testid="recipe-photo"
+        src={ image }
+        alt="foto da comida ou bebida"
+      />
+      <h3 data-testid="recipe-title">{name}</h3>
+      <h5 data-testid="recipe-category">{category}</h5>
       <button
+        data-testid="favorite-btn"
         type="button"
         onClick={ handleClickFavorite }
         style={ {
@@ -28,6 +37,7 @@ function ProductHeader() {
         <img src={ !favorite ? whiteHeartIcon : blackHeartIcon } alt="not favorite" />
       </button>
       <button
+        data-testid="share-btn"
         type="button"
         onClick={ () => copy('colocar aqui o link da página atual') }
         style={ {
@@ -40,5 +50,11 @@ function ProductHeader() {
     </div>
   );
 }
+
+ProductHeader.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+};
 
 export default ProductHeader;
