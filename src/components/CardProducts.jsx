@@ -1,12 +1,15 @@
-import React from 'react';
+/* eslint-disable no-unreachable */
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import Context from '../Context/Context';
 import '../App.css';
 
 function CardProducts(props) {
-  const { source, products } = props;
-
-  const renderFoodProduct = ({ meals }) => {
-    const mealsMap = meals.map((meal) => (
+  const { source } = props;
+  const context = useContext(Context);
+  const { data } = context;
+  const renderFoodProduct = () => {
+    const mealsMap = data.map((meal) => (
       {
         id: meal.idMeal,
         name: meal.strMeal,
@@ -23,8 +26,8 @@ function CardProducts(props) {
     );
   };
 
-  const renderDrinkProduct = ({ drinks }) => {
-    const drinksMap = drinks.map((drink) => (
+  const renderDrinkProduct = () => {
+    const drinksMap = data.map((drink) => (
       {
         id: drink.idDrink,
         name: drink.strDrink,
@@ -41,8 +44,8 @@ function CardProducts(props) {
     );
   };
 
-  const renderDoneAndFavoriteProduct = (product, sourceProduct) => (
-    product.map((item) => {
+  const renderDoneAndFavoriteProduct = (sourceProduct) => (
+    data.map((item) => {
       const isFood = item.type === 'food';
       const isDoneScreen = sourceProduct === 'done';
       return (
@@ -89,10 +92,10 @@ function CardProducts(props) {
   );
 
   const sources = {
-    food: () => renderFoodProduct(products),
-    drink: () => renderDrinkProduct(products),
-    done: () => renderDoneAndFavoriteProduct(products, source),
-    favorite: () => renderDoneAndFavoriteProduct(products, source),
+    food: () => renderFoodProduct(),
+    drink: () => renderDrinkProduct(),
+    done: () => renderDoneAndFavoriteProduct(source),
+    favorite: () => renderDoneAndFavoriteProduct(source),
   };
   return sources[source]();
 }

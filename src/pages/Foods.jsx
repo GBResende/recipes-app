@@ -6,9 +6,9 @@ import Header from '../components/Header';
 
 const Foods = () => (
   <>
-    <Header />
+    <Header title="Foods" />
     {/* <CategoryButtons /> */}
-    {/* <CardProducts source="food" products={ meals } /> */}
+    {/* <CardProducts source="food" /> */}
     <Footer />
   </>
 );
