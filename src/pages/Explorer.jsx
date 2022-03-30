@@ -8,9 +8,9 @@ const Explorer = () => {
   const history = useHistory();
 
   return (
-    <div>
+    <>
       <Header title="Explore" />
-      <div>
+      <div className="explore-body">
         <Button
           data-testid="explore-foods"
           onClick={ () => history.push('/explore/foods') }
@@ -27,7 +27,8 @@ const Explorer = () => {
         </Button>
       </div>
       <Footer />
-    </div>
+    </>
+
   );
 };
 
