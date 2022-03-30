@@ -39,7 +39,7 @@ const Routes = () => {
     { path: '/done-recipes', component: (props) => <DoneRecipes { ...props } /> },
     { path: '/favorite-recipes',
       component: (props) => <FavoritesRecipes { ...props } /> },
-    { path: '/*', component: <h1>Page Not Found</h1> },
+    { path: '*', component: <h1>Page Not Found</h1> },
   ];
 
   return (
