@@ -12,8 +12,8 @@ const DrinksIngredients = () => {
       );
       const { drinks } = await response.json();
 
-      const limit = 12;
-      setIngredients(drinks.slice(0, limit));
+      const indexSlice = 12;
+      setIngredients(drinks.slice(0, indexSlice));
     };
     fetchData();
   }, []);

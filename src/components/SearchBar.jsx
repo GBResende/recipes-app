@@ -3,7 +3,7 @@ import Context from '../Context/Context';
 
 function SearchBar() {
   const context = useContext(Context);
-  console.log('context', context);
+  // console.log('context', context);
   const { searchFoods, setSearchFoods } = context;
   const [searchValues, setSearchValues] = useState({
     value: '',

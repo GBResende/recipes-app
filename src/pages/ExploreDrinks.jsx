@@ -6,6 +6,7 @@ import Header from '../components/Header';
 
 const ExploreDrinks = () => {
   const history = useHistory();
+  const { setFilterDrinks } = useContext(Context);
 
   const [surprise, setSurprise] = useState('');
   useEffect(() => {
@@ -17,6 +18,13 @@ const ExploreDrinks = () => {
     };
     fetchData();
   }, []);
+
+  const fetchFilteredDrinks = async (id) => {
+    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?iid=${id}`);
+    results = await response.json();
+    setFilterDrinks(results.drinks);
+  };
+
   return (
     <>
       <Header title="Explore Drinks" />
@@ -24,7 +32,10 @@ const ExploreDrinks = () => {
         <Button
           variant="primary"
           data-testid="explore-by-ingredient"
-          onClick={ () => history.push('/explore/drinks/ingredients') }
+          onClick={ () => {
+            history.push('/explore/drinks/ingredients');
+            fetchFilteredDrinks(surprise);
+          } }
         >
           By Ingredient
         </Button>

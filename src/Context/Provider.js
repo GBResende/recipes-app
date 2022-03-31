@@ -1,33 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+// import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Context from './Context';
-import fetchAPI from '../services/fetchApi';
-
-const indexSlice = 12;
 
 function Provider({ children }) {
-  const [data, setData] = useState([]);
-  const [searchFoods, setSearchFoods] = useState({
-    searchFoods: {},
-    setSearchFoods: '',
-  });
-  const [filterFoods, setFilterFoods] = useState('');
-
-  useEffect(() => {
-    const apiResult = async () => {
-      const response = await fetchAPI();
-      const result = await response.meals.slice(0, indexSlice);
-      setData(result);
-    };
-    apiResult();
-  }, []);
+  const [dataFoods, setDataFoods] = useState([]);
+  const [dataDrinks, setDataDrinks] = useState([]);
+  const [searchFoods, setSearchFoods] = useState({});
+  const [filterFoods, setFilterFoods] = useState([]);
+  const [filterDrinks, setFilterDrinks] = useState([]);
 
   const myContext = {
-    data,
+    dataFoods,
+    setDataFoods,
+    dataDrinks,
+    setDataDrinks,
     searchFoods,
     setSearchFoods,
     filterFoods,
     setFilterFoods,
+    filterDrinks,
+    setFilterDrinks,
   };
 
   return (

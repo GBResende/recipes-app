@@ -1,5 +1,5 @@
-/* eslint-disable no-unreachable */
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Context from '../Context/Context';
 import '../App.css';
@@ -7,9 +7,9 @@ import '../App.css';
 function CardProducts(props) {
   const { source } = props;
   const context = useContext(Context);
-  const { data } = context;
+  const { dataFoods, dataDrinks } = context;
   const renderFoodProduct = () => {
-    const mealsMap = data.map((meal) => (
+    const mealsMap = dataFoods.map((meal) => (
       {
         id: meal.idMeal,
         name: meal.strMeal,
@@ -18,16 +18,18 @@ function CardProducts(props) {
     ));
     return (
       mealsMap.map(({ id, name, image }) => (
-        <article key={ id } className="card-product">
-          <img src={ image } alt={ name } />
-          <p>{name}</p>
-        </article>
+        <Link key={ id } to={ `/foods/${id}` }>
+          <article className="card-product">
+            <img src={ image } alt={ name } />
+            <p>{name}</p>
+          </article>
+        </Link>
       ))
     );
   };
 
   const renderDrinkProduct = () => {
-    const drinksMap = data.map((drink) => (
+    const drinksMap = dataDrinks.map((drink) => (
       {
         id: drink.idDrink,
         name: drink.strDrink,
@@ -36,10 +38,12 @@ function CardProducts(props) {
     ));
     return (
       drinksMap.map(({ id, name, image }) => (
-        <div key={ id }>
-          <img src={ image } alt={ name } />
-          <p>{name}</p>
-        </div>
+        <Link key={ id } to={ `/drinks/${id}` }>
+          <article key={ id }>
+            <img src={ image } alt={ name } />
+            <p>{name}</p>
+          </article>
+        </Link>
       ))
     );
   };

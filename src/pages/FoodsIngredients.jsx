@@ -10,8 +10,8 @@ const FoodsIngredients = () => {
       const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
       const { meals } = await response.json();
 
-      const limit = 12;
-      setIngredients(meals.slice(0, limit));
+      const indexSlice = 12;
+      setIngredients(meals.slice(0, indexSlice));
     };
     fetchData();
   }, []);

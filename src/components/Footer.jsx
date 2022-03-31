@@ -10,13 +10,13 @@ const Footer = () => {
 
   return (
     <div className="explore-bar">
-      <Button variant="link" onClick={ () => history.push('/explore/drinks') }>
+      <Button variant="link" onClick={ () => history.push('/drinks') }>
         <img src={ drinkIcon } alt="" />
       </Button>
       <Button variant="link" onClick={ () => history.push('/explore') }>
         <img src={ exploreIcon } alt="" />
       </Button>
-      <Button variant="link" onClick={ () => history.push('/explore/foods') }>
+      <Button variant="link" onClick={ () => history.push('/foods') }>
         <img src={ mealIcon } alt="" />
       </Button>
     </div>
