@@ -1,14 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import { useHistory /* useLocation */ } from 'react-router-dom';
 import ProductHeader from '../components/ProductHeader';
 import Footer from '../components/Footer';
+import { setProgressRecipeToLocalStorage } from '../services/localStorage';
+
+const getIngredientsAndMeasures = (obj) => {
+  const ingredients = Object
+    .keys(obj)
+    .filter((ingItem) => ingItem.includes('Ingredient') && obj[ingItem]);
+  const measures = Object
+    .keys(obj)
+    .filter((ingMeasure) => ingMeasure.includes('Measure') && obj[ingMeasure]);
+  return ingredients.reduce((acc, ingredient, i) => {
+    console.log(obj[ingredient]);
+    return obj[ingredient].length
+      ? (acc
+        .push({
+          ingredient: obj[ingredient],
+          measure: obj[measures[i]],
+        }) && acc)
+      : acc;
+  }, []);
+};
 
 function DetailRecipes() {
-  const { location: { pathname } } = useHistory();
-  const productId = pathname.replace(/[^0-9]/g, '');
+  const history = useHistory();
+  const productId = history.location.pathname.replace(/[^0-9]/g, '');
   let productURL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${productId}`;
-  if (pathname.includes('drinks')) {
+  if (history.location.pathname.includes('drinks')) {
     productURL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${productId}`;
   }
   const [productData, setProductData] = useState({});
@@ -17,33 +37,22 @@ function DetailRecipes() {
     fetch(productURL)
       .then((response) => response.json())
       .then((data) => {
-        if (pathname.includes('foods')) {
+        if (history.location.pathname.includes('foods')) {
+          console.log('entrei');
           return setProductData({ ...data.meals[0] });
         }
         setProductData({ ...data.drinks[0] });
       });
-  }, [productURL, pathname]);
+  }, [productURL]);
 
-  const getIngredientsAndMeasures = (obj) => {
-    const ingredients = Object
-      .keys(obj)
-      .filter((ingItem) => ingItem.includes('Ingredient') && obj[ingItem]);
-    const measures = Object
-      .keys(obj)
-      .filter((ingMeasure) => ingMeasure.includes('Measure') && obj[ingMeasure]);
-    return ingredients.reduce((acc, ingredient, i) => {
-      console.log(obj[ingredient]);
-      return obj[ingredient].length
-        ? (acc
-          .push({
-            ingredient: obj[ingredient],
-            measure: obj[measures[i]],
-          }) && acc)
-        : acc;
-    }, []);
+  const handleClickStartRecipe = () => {
+    setProgressRecipeToLocalStorage(productId);
+    history.push(`${history.location.pathname}/in-progress`);
   };
 
   const {
+    strArea,
+    strAlcoholic,
     strDrink,
     strDrinkThumb,
     strCategory,
@@ -52,13 +61,16 @@ function DetailRecipes() {
     strMeal,
     strMealThumb,
   } = productData;
-  console.log(productData);
   return (
     <div>
       <ProductHeader
+        nationality={ strArea || '' }
+        productID={ productId }
         name={ strDrink || strMeal }
         image={ strDrinkThumb || strMealThumb }
         category={ strCategory }
+        alcoholic={ strAlcoholic || '' }
+        linkRecipe={ window.location.href }
       />
       <section>
         <h3>Ingredients</h3>
@@ -102,6 +114,7 @@ function DetailRecipes() {
         <div data-testid={ `${1}-recomendation-card` }>aqui vão 6 recomendações</div>
       </section>
       <Button
+        onClick={ handleClickStartRecipe }
         data-testid="start-recipe-btn"
         type="button"
       >
