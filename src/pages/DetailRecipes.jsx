@@ -18,8 +18,7 @@ function DetailRecipes() {
       .then((response) => response.json())
       .then((data) => {
         if (pathname.includes('foods')) {
-          console.log('entrei');
-          setProductData({ ...data.meals[0] });
+          return setProductData({ ...data.meals[0] });
         }
         setProductData({ ...data.drinks[0] });
       });

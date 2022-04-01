@@ -7,9 +7,9 @@ import '../App.css';
 function CardProducts(props) {
   const { source } = props;
   const context = useContext(Context);
-  const { dataFoods, dataDrinks, filterFoods } = context;
+  const { dataFoods, dataDrinks, filterFoods, filterDrinks } = context;
   const renderFoodProduct = () => {
-    const toShow = filterFoods.length > 0 ? [...filterFoods] : [...dataFoods];
+    const toShow = filterFoods.length ? [...filterFoods] : [...dataFoods];
     const mealsMap = toShow.map((meal) => (
       {
         id: meal.idMeal,
@@ -18,11 +18,11 @@ function CardProducts(props) {
       }
     ));
     return (
-      mealsMap.map(({ id, name, image }) => (
+      mealsMap.map(({ id, name, image }, index) => (
         <Link key={ id } to={ `/foods/${id}` }>
-          <article className="card-product">
-            <img src={ image } alt={ name } />
-            <p>{name}</p>
+          <article data-testid={ `${index}-recipe-card` }>
+            <img src={ image } alt={ name } data-testid={ `${index}-card-img` } />
+            <p data-testid={ `${index}-card-name` }>{name}</p>
           </article>
         </Link>
       ))
@@ -30,7 +30,8 @@ function CardProducts(props) {
   };
 
   const renderDrinkProduct = () => {
-    const drinksMap = dataDrinks.map((drink) => (
+    const toShow = filterDrinks.length ? [...filterDrinks] : [...dataDrinks];
+    const drinksMap = toShow.map((drink) => (
       {
         id: drink.idDrink,
         name: drink.strDrink,
@@ -38,11 +39,11 @@ function CardProducts(props) {
       }
     ));
     return (
-      drinksMap.map(({ id, name, image }) => (
+      drinksMap.map(({ id, name, image }, index) => (
         <Link key={ id } to={ `/drinks/${id}` }>
-          <article key={ id }>
-            <img src={ image } alt={ name } />
-            <p>{name}</p>
+          <article data-testid={ `${index}-recipe-card` }>
+            <img src={ image } alt={ name } data-testid={ `${index}-card-img` } />
+            <p data-testid={ `${index}-card-name` }>{name}</p>
           </article>
         </Link>
       ))
@@ -50,25 +51,46 @@ function CardProducts(props) {
   };
 
   const renderDoneAndFavoriteProduct = (sourceProduct) => (
-    data.map((item) => {
+    data.map((item, index) => {
       const isFood = item.type === 'food';
       const isDoneScreen = sourceProduct === 'done';
       return (
         <article key={ item.id }>
-          <img src={ item.image } alt={ item.name } />
+          <img
+            src={ item.image }
+            alt={ item.name }
+            data-testid={ `${index}-horizontal-image` }
+          />
           {
             isFood
               ? (
                 <>
-                  <p>{ `${item.nationality} - ${item.category}` }</p>
-                  <h3>{item.name }</h3>
+                  <p
+                    data-testid={ `${index}-horizontal-top-text` }
+                  >
+                    { `${item.nationality} - ${item.category}` }
+
+                  </p>
+                  <h3 data-testid={ `${index}-horizontal-name` }>{item.name }</h3>
                   {
                     isDoneScreen
                     && (
                       <>
-                        <p>{ `Done in: ${item.doneDate}` }</p>
+                        <p
+                          data-testid={ `${index}-horizontal-done-date` }
+                        >
+                          { `Done in: ${item.doneDate}` }
+
+                        </p>
                         {
-                          item.tags.map((tag) => <b key={ tag }><p>{tag}</p></b>)
+                          item.tags.map((tag, indexItem) => (
+                            <b
+                              key={ tag }
+                              data-testid={ `${indexItem}-${tag}-horizontal-tag` }
+                            >
+                              <p>{tag}</p>
+                            </b>
+                          ))
                         }
                       </>
                     )
@@ -81,7 +103,14 @@ function CardProducts(props) {
                   <h3>{item.name }</h3>
                   {
                     isDoneScreen
-                  && <p>{ `Done in: ${item.doneDate}` }</p>
+                  && (
+                    <p
+                      data-testid={ `${index}-horizontal-done-date` }
+                    >
+                      { `Done in: ${item.doneDate}` }
+
+                    </p>
+                  )
                   }
                 </>
               )

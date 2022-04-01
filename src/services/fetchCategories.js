@@ -13,8 +13,7 @@ async function fetchOneCategory(type, category) {
   }.com/api/json/v1/1/filter.php?c=${category}`;
   const response = await fetch(url);
   const result = await response.json();
-  console.log(result);
-  return type ? result[type].slice(0, indexSlice) : result;
+  return result[type].slice(0, indexSlice);
 }
 
 export {

@@ -17,8 +17,7 @@ function CategoryButtons() {
   }.com/api/json/v1/1/list.php?c=list`;
 
   const product = isFoodLocation ? 'meals' : 'drinks';
-  // const contextFiltered = isFoodLocation ? filterFoods : filterDrinks;
-  const setContextFiltered = isFoodLocation ? setFilterFoods : setFilterDrinks;
+  const setContextProductFiltered = isFoodLocation ? setFilterFoods : setFilterDrinks;
 
   useEffect(() => {
     const getCategories = () => {
@@ -32,39 +31,32 @@ function CategoryButtons() {
   }, [setBtnOpt, product, url]);
 
   useEffect(() => {
-    if (!isFiltered) return setContextFiltered([]);
-    fetchOneCategory(product, filter)
-      .then((result) => setContextFiltered(result));
-  }, [isFiltered, filter, product, setContextFiltered]);
+    if (filter.length) {
+      fetchOneCategory(product, filter)
+        .then((result) => setContextProductFiltered(result));
+    }
+  }, [isFiltered, filter, product, setContextProductFiltered]);
 
   const handleFilterClick = ({ target: { name } }) => {
-    if (!filter.length) {
-      setIsFiltered((prevState) => !prevState);
-      setFilter(name);
+    if (filter === name || name === 'All') {
+      setContextProductFiltered([]);
+      setFilter('');
+      return setIsFiltered(false);
     }
-    // quando clicar verificar se tem coisa no filter
-    // se tiver e for igual ao 'name' remove filtros
-    // se for diferente filtra novamente
+    setIsFiltered((prevState) => !prevState);
+    setFilter(name);
   };
 
   return (
     <div>
-      { isFiltered && <p>FILTRADO</p>}
-      <button
-        type="button"
-        onClick={ handleFilterClick }
-        data-testid="All-category-filter"
-      >
-        All
-      </button>
-      {btnOpt.map(({ strCategory }) => (
+      {[{ strCategory: 'All' }, ...btnOpt].map(({ strCategory }) => (
         <button
           type="button"
           key={ strCategory }
           name={ strCategory }
           value={ strCategory }
           onClick={ handleFilterClick }
-          data-testid={ `${strCategory.toLowerCase()}-category-filter` }
+          data-testid={ `${strCategory}-category-filter` }
         >
           {strCategory}
         </button>))}
