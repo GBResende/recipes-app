@@ -39,7 +39,6 @@ const Routes = () => {
     { path: '/done-recipes', component: (props) => <DoneRecipes { ...props } /> },
     { path: '/favorite-recipes',
       component: (props) => <FavoritesRecipes { ...props } /> },
-    { path: '*', component: <h1>Page Not Found</h1> },
   ];
 
   return (
@@ -49,6 +48,7 @@ const Routes = () => {
           <Route key={ path } exact path={ path } render={ component } />
         ))
       }
+      <Route path="*" component={ () => <h1>Page Not Found</h1> } />
     </Switch>
   );
 };
