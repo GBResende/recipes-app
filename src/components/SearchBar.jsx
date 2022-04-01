@@ -40,6 +40,7 @@ function SearchBar() {
           id="ingredient"
           value="ingredient"
           onChange={ handleChange }
+          data-testid="ingredient-search-radio"
         />
         Ingredient
       </label>
@@ -50,6 +51,7 @@ function SearchBar() {
           id="name"
           value="name"
           onChange={ handleChange }
+          data-testid="name-search-radio"
         />
         Name
       </label>
@@ -60,10 +62,17 @@ function SearchBar() {
           id="first-letter"
           value="first-letter"
           onChange={ handleChange }
+          data-testid="first-letter-search-radio"
         />
         First Letter
       </label>
-      <button type="button" onClick={ handleSearchClick }>Search</button>
+      <button
+        type="button"
+        onClick={ handleSearchClick }
+        data-testid="exec-search-btn"
+      >
+        Search
+      </button>
     </div>
   );
 }

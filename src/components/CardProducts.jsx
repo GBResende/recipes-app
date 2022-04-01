@@ -7,9 +7,10 @@ import '../App.css';
 function CardProducts(props) {
   const { source } = props;
   const context = useContext(Context);
-  const { dataFoods, dataDrinks } = context;
+  const { dataFoods, dataDrinks, filterFoods } = context;
   const renderFoodProduct = () => {
-    const mealsMap = dataFoods.map((meal) => (
+    const toShow = filterFoods.length > 0 ? [...filterFoods] : [...dataFoods];
+    const mealsMap = toShow.map((meal) => (
       {
         id: meal.idMeal,
         name: meal.strMeal,

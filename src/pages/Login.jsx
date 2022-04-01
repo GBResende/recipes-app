@@ -16,6 +16,13 @@ function Login() {
     }
   };
 
+  const handleClick = () => {
+    localStorage.setItem('user', JSON.stringify({ email }));
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('drinksToken', '1');
+    history.push('/foods');
+  };
+
   useEffect(() => {
     const emailCheck = new RegExp('[a-z0-9]+@[a-z]+.[a-z]');
     const passwordCheck = 6;
@@ -42,7 +49,7 @@ function Login() {
       />
       <Button
         type="button"
-        onClick={ () => history.push('/foods') }
+        onClick={ handleClick }
         disabled={ isDisabled }
         data-testid="login-submit-btn"
       >
