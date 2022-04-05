@@ -34,9 +34,33 @@ const getLocalStorage = (id, wichIngredient) => {
   return ingredientsByLocal;
 };
 
-// const getProgressInPercent = (total, done) => {
-
-// }
+const buildObj = (recipe, isFoodLocation) => {
+  const {
+    idMeal,
+    idDrink,
+    strArea,
+    strCategory,
+    strAlcoholic,
+    strDrink,
+    strMeal,
+    strMealThumb,
+    strDrinkThumb,
+    strTags,
+  } = recipe;
+  const date = new Date();
+  return {
+    id: isFoodLocation ? idMeal : idDrink,
+    type: isFoodLocation ? 'food' : 'drink',
+    nationality: strArea || '',
+    category: strCategory || '',
+    alcoholicOrNot: strAlcoholic || '',
+    name: strDrink || strMeal,
+    image: strMealThumb || strDrinkThumb,
+    doneDate: `${date.toLocaleString('pt-br',
+      { year: 'numeric', month: '2-digit', day: '2-digit' })}`,
+    tags: strTags.split(','),
+  };
+};
 
 const InProgressRecipes = () => {
   const { id } = useParams();
@@ -53,17 +77,34 @@ const InProgressRecipes = () => {
     ? 'themealdb'
     : 'thecocktaildb';
 
+  console.log({ ingredientsKeys });
   const updateProgress = () => {
     const total = Object.keys(getIngredientsAndMeasures(recipe)).length;
     const done = useIngredient.length;
     setPercent((100 / (total / done)).toFixed(2));
-    console.log(done, total);
+  };
+
+  //   [{
+  //     id: id-da-receita,
+  //     type: comida-ou-bebida,
+  //     nationality: nacionalidade-da-receita-ou-texto-vazio,
+  //     category: categoria-da-receita-ou-texto-vazio,
+  //     alcoholicOrNot: alcoholic-ou-non-alcoholic-ou-texto-vazio,
+  //     name: nome-da-receita,
+  //     image: imagem-da-receita,
+  //     doneDate: quando-a-receita-foi-concluida,
+  //     tags: array-de-tags-da-receita-ou-array-vazio
+  // }]
+  const handleClickDone = () => {
+    const getStorage = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+
+    const doneToStore = buildObj(recipe, isFoodLocation);
+    localStorage.setItem('doneRecipes', JSON.stringify([...getStorage, doneToStore]));
   };
 
   useEffect(() => {
     updateProgress();
     setIngredientsKeys(getIngredientsAndMeasures(recipe));
-    console.log(ingredientsKeys);
   }, [useIngredient]);
 
   useEffect(() => {
@@ -161,6 +202,7 @@ const InProgressRecipes = () => {
           type="button"
           data-testid="finish-recipe-btn"
           disabled={ !disabledButton }
+          onClick={ handleClickDone }
         >
           Finish Recipe
         </Button>

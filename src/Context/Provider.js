@@ -9,7 +9,7 @@ function Provider({ children }) {
   const [searchFoods, setSearchFoods] = useState({});
   const [filterFoods, setFilterFoods] = useState([]);
   const [filterDrinks, setFilterDrinks] = useState([]);
-  const [filterRecipes, setFilterRecipes] = useState([]);
+  const [filterRecipes, setFilterRecipes] = useState([{ teste: 'sadasdasdasdasd' }]);
 
   const myContext = {
     dataFoods,
