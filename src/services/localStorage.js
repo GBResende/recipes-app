@@ -7,7 +7,6 @@ export function setProgressRecipeToLocalStorage(id, doneIngredients = []) {
 
   const previousMeals = previousLocalStorage.meals || null;
   const previousCocktails = previousLocalStorage.cocktails || null;
-
   const objReceived = {
     cocktails: {
       ...previousCocktails,
