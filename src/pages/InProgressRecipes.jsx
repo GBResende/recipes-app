@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import { Button, ProgressBar } from 'react-bootstrap';
 import ProductHeader from '../components/ProductHeader';
 import { setProgressRecipeToLocalStorage } from '../services/localStorage';
 
@@ -19,10 +20,31 @@ const getIngredientsAndMeasures = (obj) => {
     : acc), []);
 };
 
+const getLocalStorage = (id, wichIngredient) => {
+  let ingredientsByLocal = JSON
+    .parse(localStorage.getItem('inProgressRecipes') || '[]');
+  if (!Object.keys(ingredientsByLocal).length) {
+    localStorage.setItem(
+      'inProgressRecipes',
+      JSON.stringify({ [wichIngredient]: { [id]: [] } }),
+    );
+    ingredientsByLocal = JSON
+      .parse(localStorage.getItem('inProgressRecipes') || '[]');
+  }
+  return ingredientsByLocal;
+};
+
+// const getProgressInPercent = (total, done) => {
+
+// }
+
 const InProgressRecipes = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState({});
   const [useIngredient, setUseIngredient] = useState([]);
+  const [disabledButton, setDisabledButton] = useState(true);
+  const [percent, setPercent] = useState('0');
+  const [ingredientsKeys, setIngredientsKeys] = useState([]);
   const { location: { pathname } } = useHistory();
   const isFoodLocation = pathname.includes('food');
   const wichIngredient = isFoodLocation ? 'meals' : 'cocktails';
@@ -30,11 +52,22 @@ const InProgressRecipes = () => {
   const stringUrl = isFoodLocation
     ? 'themealdb'
     : 'thecocktaildb';
-  console.log(useIngredient);
+
+  const updateProgress = () => {
+    const total = Object.keys(getIngredientsAndMeasures(recipe)).length;
+    const done = useIngredient.length;
+    setPercent((100 / (total / done)).toFixed(2));
+    console.log(done, total);
+  };
 
   useEffect(() => {
-    const ingredientsByLocal = JSON
-      .parse(localStorage.getItem('inProgressRecipes') || '[]');
+    updateProgress();
+    setIngredientsKeys(getIngredientsAndMeasures(recipe));
+    console.log(ingredientsKeys);
+  }, [useIngredient]);
+
+  useEffect(() => {
+    const ingredientsByLocal = getLocalStorage(id, wichIngredient);
     const url = `https://www.${stringUrl}.com/api/json/v1/1/lookup.php?i=${id}`;
     fetch(url)
       .then((response) => response.json())
@@ -45,6 +78,8 @@ const InProgressRecipes = () => {
   }, []);
 
   const handleCheck = ({ target: { name, checked } }) => {
+    setDisabledButton(useIngredient.length + 1
+      === Object.keys(getIngredientsAndMeasures(recipe)).length);
     const ingredientsByLocal = JSON
       .parse(localStorage.getItem('inProgressRecipes') || '[]');
     setUseIngredient(checked
@@ -83,12 +118,25 @@ const InProgressRecipes = () => {
           />
         )
       }
+      <ProgressBar className="progress">
+        <div
+          className="progress-bar"
+          role="progressbar"
+          style={ { width: `${percent}%` } }
+        >
+          { `${percent}%`}
+
+        </div>
+      </ProgressBar>
       <div>
         <h3>Ingredients</h3>
         {
-          getIngredientsAndMeasures(recipe).map(({ ingredient, measure }) => (
+          getIngredientsAndMeasures(recipe).map(({ ingredient, measure }, index) => (
             <ul key={ ingredient }>
-              <label htmlFor={ ingredient }>
+              <label
+                htmlFor={ ingredient }
+                data-testid={ `${index}-ingredient-step` }
+              >
                 <input
                   checked={ useIngredient.some((ing) => ing === ingredient) }
                   name={ ingredient }
@@ -104,8 +152,19 @@ const InProgressRecipes = () => {
       </div>
       <div>
         <h3>Instructions</h3>
-        {strInstructions}
+        <p data-testid="instructions">
+          {strInstructions}
+        </p>
       </div>
+      <Link to="/done-recipes">
+        <Button
+          type="button"
+          data-testid="finish-recipe-btn"
+          disabled={ !disabledButton }
+        >
+          Finish Recipe
+        </Button>
+      </Link>
     </>
   );
 };

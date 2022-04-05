@@ -10,6 +10,8 @@ import { setFavoriteToLocalStorage } from '../services/localStorage';
 function ProductHeader(props) {
   const [favorite, setFavorite] = useState(false);
   const [isCopiedLink, setIsCopiedLink] = useState(false);
+  const { location: { origin } } = window;
+
   // const [inProgress, setInProgress] = useState(false);
   const {
     image,
@@ -33,10 +35,10 @@ function ProductHeader(props) {
     //   Object.keys(inProgressFromLocalStorage)
   }, [productID, setFavorite]);
 
+  const type = linkRecipe.includes('foods') ? 'food' : 'drink';
   const handleClickFavorite = () => {
     setFavorite(!favorite);
 
-    const type = linkRecipe.includes('foods') ? 'food' : 'drink';
     const objectTest = {
       id: productID,
       name,
@@ -52,7 +54,7 @@ function ProductHeader(props) {
 
   const handleClickShare = () => {
     setIsCopiedLink(true);
-    copy(linkRecipe);
+    copy(`${origin}/${type === 'food' ? 'foods' : 'drinks'}/${productID}`);
   };
 
   return (
