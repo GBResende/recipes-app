@@ -58,7 +58,7 @@ const buildObj = (recipe, isFoodLocation) => {
     image: strMealThumb || strDrinkThumb,
     doneDate: `${date.toLocaleString('pt-br',
       { year: 'numeric', month: '2-digit', day: '2-digit' })}`,
-    tags: strTags.split(','),
+    tags: strTags ? strTags.split(',') : [],
   };
 };
 
@@ -76,25 +76,13 @@ const InProgressRecipes = () => {
   const stringUrl = isFoodLocation
     ? 'themealdb'
     : 'thecocktaildb';
-
-  console.log({ ingredientsKeys });
+  console.log(ingredientsKeys);
   const updateProgress = () => {
     const total = Object.keys(getIngredientsAndMeasures(recipe)).length;
     const done = useIngredient.length;
     setPercent((100 / (total / done)).toFixed(2));
   };
 
-  //   [{
-  //     id: id-da-receita,
-  //     type: comida-ou-bebida,
-  //     nationality: nacionalidade-da-receita-ou-texto-vazio,
-  //     category: categoria-da-receita-ou-texto-vazio,
-  //     alcoholicOrNot: alcoholic-ou-non-alcoholic-ou-texto-vazio,
-  //     name: nome-da-receita,
-  //     image: imagem-da-receita,
-  //     doneDate: quando-a-receita-foi-concluida,
-  //     tags: array-de-tags-da-receita-ou-array-vazio
-  // }]
   const handleClickDone = () => {
     const getStorage = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
 
@@ -105,7 +93,9 @@ const InProgressRecipes = () => {
   useEffect(() => {
     updateProgress();
     setIngredientsKeys(getIngredientsAndMeasures(recipe));
-  }, [useIngredient]);
+    setDisabledButton(useIngredient.length
+      === Object.keys(getIngredientsAndMeasures(recipe)).length);
+  }, [useIngredient, recipe]);
 
   useEffect(() => {
     const ingredientsByLocal = getLocalStorage(id, wichIngredient);
@@ -116,11 +106,11 @@ const InProgressRecipes = () => {
         setRecipe({ ...data[ingredientType][0] });
       });
     setUseIngredient(ingredientsByLocal[wichIngredient][id]);
+    setDisabledButton(useIngredient.length
+      === Object.keys(getIngredientsAndMeasures(recipe)).length);
   }, []);
 
   const handleCheck = ({ target: { name, checked } }) => {
-    setDisabledButton(useIngredient.length + 1
-      === Object.keys(getIngredientsAndMeasures(recipe)).length);
     const ingredientsByLocal = JSON
       .parse(localStorage.getItem('inProgressRecipes') || '[]');
     setUseIngredient(checked
@@ -131,6 +121,8 @@ const InProgressRecipes = () => {
         ? [...ingredientsByLocal[wichIngredient][id], name]
         : ingredientsByLocal[wichIngredient][id].filter((prev) => prev !== name)),
     );
+    setDisabledButton(useIngredient.length
+      === Object.keys(getIngredientsAndMeasures(recipe)).length);
   };
 
   const {
