@@ -41,7 +41,7 @@ const FoodsNationality = () => {
 
   return (
     <>
-      <Header />
+      <Header title="Explore Nationalities" showSearchButton />
       <select
         data-testid="explore-by-nationality-dropdown"
         onChange={ handleSelectChange }

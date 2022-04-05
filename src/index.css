@@ -11,17 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 .explore-bar {
-  width: 100%;
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  bottom: 0;
 }
 
 .explore-body {
@@ -29,23 +23,22 @@ code {
   flex-direction: column;
   justify-content: center;
   gap: 16px;
+  bottom: 0;
 }
-body {
-  position: relative;
-}
-
 header {
   text-align: center;
   margin-top: 16px;
   position: sticky;
   top: 0;
 }
-
-footer {
-  position: fixed;
+.horizontal-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
-.card-img {
-  width: 286px;
-  height: 180px;
-  object-fit: contain;
+
+p{
+  margin: 0 !important;
 }

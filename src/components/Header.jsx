@@ -1,34 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
-function Header({ title, showSearchButton, setIsSearchBarVisible, isSearchBarVisible }) {
-  // const history = useHistory();
-  // const { location: { pathname } } = history;
-  // const haveToshow = ['/foods', '/drinks'];
-  // // const showSearch = haveToshow.includes(pathname);
-
-  //   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+function Header({
+  title,
+  showSearchButton,
+  setIsSearchBarVisible,
+  isSearchBarVisible,
+}) {
   return (
-    <header>
+    <Navbar
+      data-testid="page-title"
+      className="d-flex justify-content-between fluid align-items-center"
+      sticky="top"
+    >
       <Link to="/profile">
-        <img src={ profileIcon } alt="" />
+        <img src={ profileIcon } alt="" data-testid="profile-top-btn" />
       </Link>
-      <h1>{title}</h1>
-      {showSearchButton && (
+      <h1 data-testid="page-title" className="m-0">{title}</h1>
+      {showSearchButton ? (
         <Button
           variant="link"
           onClick={ () => setIsSearchBarVisible(!isSearchBarVisible) }
         >
-          <img src={ searchIcon } alt="" />
+          <img src={ searchIcon } alt="" data-testid="search-top-btn" />
         </Button>
-      )}
-    </header>
+      ) : <div />}
+    </Navbar>
   );
 }
+
 Header.defaultProp = {
   showSearchButton: false,
   isSearchBarVisible: false,

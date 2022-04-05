@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import Context from '../Context/Context';
 import { fetchCategories, fetchOneCategory } from '../services/fetchCategories';
@@ -50,7 +51,7 @@ function CategoryButtons() {
   return (
     <div>
       {[{ strCategory: 'All' }, ...btnOpt].map(({ strCategory }) => (
-        <button
+        <Button
           type="button"
           key={ strCategory }
           name={ strCategory }
@@ -59,7 +60,7 @@ function CategoryButtons() {
           data-testid={ `${strCategory}-category-filter` }
         >
           {strCategory}
-        </button>))}
+        </Button>))}
     </div>
   );
 }

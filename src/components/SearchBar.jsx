@@ -32,6 +32,7 @@ function SearchBar() {
         placeholder="digite aqui"
         value={ searchValues.value }
         onChange={ handleChange }
+        data-testid="search-input"
       />
       <label htmlFor="ingredient">
         <input

@@ -1,7 +1,10 @@
 import React from 'react';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const Profile = () => (
-  <div>
+  <>
+    <Header title="Profile" />
     <div>Profile</div>
     <p>exibir header e footer </p>
     <p>email do usuario-pegar no local storage </p>
@@ -14,7 +17,8 @@ const Profile = () => (
     <button type="button">
       Logout
     </button>
-  </div>
+    <Footer />
+  </>
 );
 
 export default Profile;

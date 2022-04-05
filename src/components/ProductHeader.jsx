@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import copy from 'clipboard-copy';
+import { Button } from 'react-bootstrap';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
@@ -10,19 +11,27 @@ function ProductHeader(props) {
   const [favorite, setFavorite] = useState(false);
   const [isCopiedLink, setIsCopiedLink] = useState(false);
   // const [inProgress, setInProgress] = useState(false);
-  const { image, name, category, alcoholic, linkRecipe, productID, nationality } = props;
+  const {
+    image,
+    name,
+    category,
+    alcoholic,
+    linkRecipe,
+    productID,
+    nationality,
+  } = props;
 
   useEffect(() => {
-    const favoritesFromLocalStorage = JSON
-      .parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoritesFromLocalStorage = JSON.parse(
+      localStorage.getItem('favoriteRecipes') || '[]',
+    );
     if (favoritesFromLocalStorage.some((fav) => fav.id === productID)) {
-      console.log('entrei');
       setFavorite(true);
     }
     // const inProgressFromLocalStorage = JSON
     //   .parse(localStorage.getItem('favoriteRecipes'));
     //   Object.keys(inProgressFromLocalStorage)
-  }, []);
+  }, [productID, setFavorite]);
 
   const handleClickFavorite = () => {
     setFavorite(!favorite);
@@ -41,8 +50,6 @@ function ProductHeader(props) {
     setFavoriteToLocalStorage(objectTest, favorite);
   };
 
-  const rgba = 'rgba(0, 0, 0, 0%)';
-
   const handleClickShare = () => {
     setIsCopiedLink(true);
     copy(linkRecipe);
@@ -58,37 +65,29 @@ function ProductHeader(props) {
       <h3 data-testid="recipe-title">{name}</h3>
       <h5 data-testid="recipe-category">{category}</h5>
       <h5>{alcoholic}</h5>
-      <button
+      <Button
+        variant="link"
         data-testid="favorite-btn"
         type="button"
         onClick={ handleClickFavorite }
-        style={ {
-          backgroundColor: rgba,
-          border: '0',
-        } }
       >
-        <img src={ !favorite ? whiteHeartIcon : blackHeartIcon } alt="not favorite" />
-      </button>
-      {
-        isCopiedLink
-          ? (
-            <span>Link copied!</span>
-          )
-          : (
-            <button
-              data-testid="share-btn"
-              type="button"
-              onClick={ handleClickShare }
-              style={ {
-                backgroundColor: rgba,
-                border: '0',
-              } }
-            >
-              <img src={ shareIcon } alt="copy" />
-            </button>
-          )
-      }
-
+        <img
+          src={ !favorite ? whiteHeartIcon : blackHeartIcon }
+          alt="not favorite"
+        />
+      </Button>
+      {isCopiedLink ? (
+        <span>Link copied!</span>
+      ) : (
+        <Button
+          variant="link"
+          data-testid="0-horizontal-share-btn"
+          type="button"
+          onClick={ handleClickShare }
+        >
+          <img src={ shareIcon } alt="copy" />
+        </Button>
+      )}
     </div>
   );
 }

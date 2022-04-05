@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -31,31 +31,36 @@ function Login() {
   }, [password, email]);
 
   return (
-    <div>
+    <Form>
       <p>Login</p>
-      <input
-        type="text"
-        placeholder="digite seu email"
-        value={ email }
-        onChange={ handleChange }
-        data-testid="email-input"
-      />
-      <input
-        type="password"
-        placeholder="digite sua senha"
-        value={ password }
-        onChange={ handleChange }
-        data-testid="password-input"
-      />
+      <Form.Group>
+        <Form.Control
+          type="text"
+          placeholder="digite seu email"
+          value={ email }
+          onChange={ handleChange }
+          data-testid="email-input"
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Control
+          type="password"
+          placeholder="digite sua senha"
+          value={ password }
+          onChange={ handleChange }
+          data-testid="password-input"
+        />
+      </Form.Group>
       <Button
         type="button"
+        className="btn-block"
         onClick={ handleClick }
         disabled={ isDisabled }
         data-testid="login-submit-btn"
       >
         Enter
       </Button>
-    </div>
+    </Form>
   );
 }
 
