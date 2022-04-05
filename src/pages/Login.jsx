@@ -19,15 +19,15 @@ function Login() {
   const handleClick = () => {
     localStorage.setItem('user', JSON.stringify({ email }));
     localStorage.setItem('mealsToken', '1');
-    localStorage.setItem('drinksToken', '1');
+    localStorage.setItem('cocktailsToken', '1');
     history.push('/foods');
   };
 
   useEffect(() => {
-    const emailCheck = new RegExp('[a-z0-9]+@[a-z]+.[a-z]');
+    const emailCheck = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i;
     const passwordCheck = 6;
-    const finalCheck = password.length >= passwordCheck && emailCheck.test(email);
-    setIsDisabled(finalCheck);
+    const finalCheck = password.length > passwordCheck && emailCheck.test(email);
+    setIsDisabled(!finalCheck);
   }, [password, email]);
 
   return (

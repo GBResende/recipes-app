@@ -7,6 +7,7 @@ import Context from '../Context/Context';
 const DrinksIngredients = () => {
   const { setFilterDrinks } = useContext(Context);
   const [ingredients, setIngredients] = useState([]);
+  const indexSlice = 12;
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
@@ -14,7 +15,6 @@ const DrinksIngredients = () => {
       );
       const { drinks } = await response.json();
 
-      const indexSlice = 12;
       setIngredients(drinks.slice(0, indexSlice));
     };
     fetchData();
@@ -25,7 +25,7 @@ const DrinksIngredients = () => {
       `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`,
     );
     const results = await response.json();
-    setFilterDrinks(results.drinks);
+    setFilterDrinks(results.drinks.slice(0, indexSlice));
   };
 
   return (

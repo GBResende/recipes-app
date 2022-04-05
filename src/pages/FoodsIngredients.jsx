@@ -7,6 +7,7 @@ import Context from '../Context/Context';
 const FoodsIngredients = () => {
   const { setFilterFoods } = useContext(Context);
   const [ingredients, setIngredients] = useState([]);
+  const indexSlice = 12;
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
@@ -14,7 +15,6 @@ const FoodsIngredients = () => {
       );
       const { meals } = await response.json();
 
-      const indexSlice = 12;
       setIngredients(meals.slice(0, indexSlice));
     };
     fetchData();
@@ -26,7 +26,7 @@ const FoodsIngredients = () => {
     );
     const results = await response.json();
     console.log(results);
-    setFilterFoods(results.meals);
+    setFilterFoods(results.meals.slice(0, indexSlice));
   };
 
   return (

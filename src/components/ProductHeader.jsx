@@ -67,11 +67,11 @@ function ProductHeader(props) {
       <h5>{alcoholic}</h5>
       <Button
         variant="link"
-        data-testid="favorite-btn"
         type="button"
         onClick={ handleClickFavorite }
       >
         <img
+          data-testid="favorite-btn"
           src={ !favorite ? whiteHeartIcon : blackHeartIcon }
           alt="not favorite"
         />
@@ -81,7 +81,7 @@ function ProductHeader(props) {
       ) : (
         <Button
           variant="link"
-          data-testid="0-horizontal-share-btn"
+          data-testid="share-btn"
           type="button"
           onClick={ handleClickShare }
         >

@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 function Profile() {
-  const storedLocalEmail = JSON.parse(localStorage.getItem('user')).email;
+  const storedLocalEmail = JSON.parse(localStorage.getItem('user')) || '';
   const history = useHistory();
   const handleLogout = () => {
     localStorage.clear();
@@ -26,7 +26,7 @@ function Profile() {
         isSearchBarVisible={ false }
       />
       <p>exibir header e footer </p>
-      <h3 data-testid="profile-email">{ storedLocalEmail }</h3>
+      <h3 data-testid="profile-email">{ storedLocalEmail && storedLocalEmail.email }</h3>
       <button
         type="button"
         onClick={ handleBtnDone }

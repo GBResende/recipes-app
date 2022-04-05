@@ -40,6 +40,8 @@ function DetailRecipes() {
         }
         setProductData({ ...data.drinks[0] });
       });
+    fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+    fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
   }, [productURL, history.location.pathname]);
 
   const handleClickStartRecipe = () => {
@@ -75,20 +77,25 @@ function DetailRecipes() {
           {getIngredientsAndMeasures(productData).map(
             ({ ingredient, measure }, index) => (
               <ul key={ index }>
-                <li>{`${ingredient} ${measure || ''}`}</li>
+                <li
+                  data-testid={ `${index}-ingredient-name-and-measure` }
+                >
+                  {`${ingredient} ${measure || ''}`}
+                </li>
               </ul>
             ),
           )}
         </div>
       </section>
       <section>
-        <h3 data-testid="instructions">Instructions</h3>
-        <div>{strInstructions}</div>
+        <h3>Instructions</h3>
+        <div data-testid="instructions">{strInstructions}</div>
       </section>
       {strYoutube && (
         <section>
           <h3>Vídeo</h3>
           <iframe
+            data-testid="video"
             width="560"
             height="315"
             src={ strYoutube.replace('watch?v=', 'embed/') }
@@ -104,7 +111,7 @@ function DetailRecipes() {
       )}
       <section>
         <h3>Recommended</h3>
-        <div data-testid={ `${1}-recomendation-card` }>
+        <div data-testid="0-recomendation-card">
           aqui vão 6 recomendações
         </div>
       </section>
@@ -112,6 +119,7 @@ function DetailRecipes() {
         onClick={ handleClickStartRecipe }
         data-testid="start-recipe-btn"
         type="button"
+        style={ { position: 'fixed', bottom: '0px' } }
       >
         Start Recipe
       </Button>
