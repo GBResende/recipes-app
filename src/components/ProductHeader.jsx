@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import copy from 'clipboard-copy';
 import { Button } from 'react-bootstrap';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -7,12 +8,23 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import { setFavoriteToLocalStorage } from '../services/localStorage';
 
+const showCategory = (type, category, alcoholicOrNot) => {
+  if (type === 'food') {
+    return category;
+  }
+  if (type === 'drink') {
+    return alcoholicOrNot;
+  }
+};
+
 function ProductHeader(props) {
   const [favorite, setFavorite] = useState(false);
   const [isCopiedLink, setIsCopiedLink] = useState(false);
+  const { location: { pathname } } = useHistory();
   const { location: { origin } } = window;
+  const isFoodLocation = pathname.includes('food');
+  const itemType = isFoodLocation ? 'food' : 'drink';
 
-  // const [inProgress, setInProgress] = useState(false);
   const {
     image,
     name,
@@ -30,9 +42,6 @@ function ProductHeader(props) {
     if (favoritesFromLocalStorage.some((fav) => fav.id === productID)) {
       setFavorite(true);
     }
-    // const inProgressFromLocalStorage = JSON
-    //   .parse(localStorage.getItem('favoriteRecipes'));
-    //   Object.keys(inProgressFromLocalStorage)
   }, [productID, setFavorite]);
 
   const type = linkRecipe.includes('foods') ? 'food' : 'drink';
@@ -65,8 +74,10 @@ function ProductHeader(props) {
         alt="foto da comida ou bebida"
       />
       <h3 data-testid="recipe-title">{name}</h3>
-      <h5 data-testid="recipe-category">{category}</h5>
-      <h5>{alcoholic}</h5>
+      <h5 data-testid="recipe-category">
+        {showCategory(itemType, category,
+          alcoholic)}
+      </h5>
       <Button
         variant="link"
         type="button"

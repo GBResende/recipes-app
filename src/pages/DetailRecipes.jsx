@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import { useHistory /* useLocation */ } from 'react-router-dom';
+import { useParams, useHistory /* useLocation */ } from 'react-router-dom';
 import ProductHeader from '../components/ProductHeader';
 import { setProgressRecipeToLocalStorage } from '../services/localStorage';
 
@@ -22,12 +22,27 @@ const getIngredientsAndMeasures = (obj) => {
   }, []);
 };
 
+const getRecipesFromStorage = (id, wichIngredient) => {
+  const recipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const recipesIdInProgress = recipes
+    ? Object.keys(recipes[wichIngredient])
+    : [];
+  return recipesIdInProgress.some((recipeId) => recipeId === id);
+};
+
+const getDoneRecipesFromStorage = (id) => {
+  const recipesDone = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
+  return recipesDone.some((recipe) => recipe.id === id);
+};
+
 function DetailRecipes() {
-  const history = useHistory();
-  const productId = history.location.pathname.replace(/[^0-9]/g, '');
-  let productURL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${productId}`;
-  if (history.location.pathname.includes('drinks')) {
-    productURL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${productId}`;
+  const { location: { pathname }, push } = useHistory();
+  const isFoodLocation = pathname.includes('food');
+  const wichIngredient = isFoodLocation ? 'meals' : 'cocktails';
+  const { id } = useParams();
+  let productURL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+  if (pathname.includes('drinks')) {
+    productURL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   }
   const [productData, setProductData] = useState({});
 
@@ -35,18 +50,18 @@ function DetailRecipes() {
     fetch(productURL)
       .then((response) => response.json())
       .then((data) => {
-        if (history.location.pathname.includes('foods')) {
+        if (pathname.includes('foods')) {
           return setProductData({ ...data.meals[0] });
         }
         setProductData({ ...data.drinks[0] });
       });
     fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
     fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-  }, [productURL, history.location.pathname]);
+  }, [productURL, pathname]);
 
   const handleClickStartRecipe = () => {
-    setProgressRecipeToLocalStorage(productId);
-    history.push(`${history.location.pathname}/in-progress`);
+    setProgressRecipeToLocalStorage(id);
+    push(`${pathname}/in-progress`);
   };
 
   const {
@@ -64,7 +79,7 @@ function DetailRecipes() {
     <div>
       <ProductHeader
         nationality={ strArea || '' }
-        productID={ productId }
+        productID={ id }
         name={ strDrink || strMeal }
         image={ strDrinkThumb || strMealThumb }
         category={ strCategory }
@@ -115,14 +130,21 @@ function DetailRecipes() {
           aqui vão 6 recomendações
         </div>
       </section>
-      <Button
-        onClick={ handleClickStartRecipe }
-        data-testid="start-recipe-btn"
-        type="button"
-        style={ { position: 'fixed', bottom: '0px' } }
-      >
-        Start Recipe
-      </Button>
+      { !getDoneRecipesFromStorage(id)
+      && (
+        <Button
+          onClick={ handleClickStartRecipe }
+          data-testid="start-recipe-btn"
+          type="button"
+          style={ { position: 'fixed', bottom: '0px' } }
+        >
+          {
+            getRecipesFromStorage(id, wichIngredient)
+              ? 'Continue Recipe'
+              : 'Start Recipe'
+          }
+        </Button>
+      )}
     </div>
   );
 }
